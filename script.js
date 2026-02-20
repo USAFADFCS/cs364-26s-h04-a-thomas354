@@ -30,7 +30,11 @@ function getIngredients() {
   // 3. Resolve with "Ingredients ready"
 
   return new Promise((resolve, reject) => {
-    // Your code here
+      // Your code here
+      showMessage("Gathering ingredients...");
+      wait(2000).then(() => {
+          resolve(showMessage("Ingredients ready"));
+      });
   });
 }
 
@@ -43,7 +47,16 @@ function blendSmoothie() {
   // 4. Otherwise resolve with "Smoothie blended"
 
   return new Promise((resolve, reject) => {
-    // Your code here
+      // Your code here
+      showMessage("Blending smoothie...");
+      wait(3000).then(() => {
+          if (Math.random() < 0.3) {
+              reject(showMessage("ERROR: Blender broke"));
+          }
+          else {
+              resolve(showMessage("Smoothie blended"));
+          }
+      });
   });
 }
 
@@ -55,7 +68,11 @@ function pourSmoothie() {
   // 3. Resolve with "Smoothie is ready!"
 
   return new Promise((resolve, reject) => {
-    // Your code here
+      // Your code here
+      showMessage("Pouring into cup...");
+      wait(1000).then(() => {
+          resolve(showMessage("Smoothie is ready!"));
+      });
   });
 }
 
@@ -67,11 +84,7 @@ function makeSmoothieWithPromises() {
   outputDiv.innerHTML = ""; // Clear previous messages
 
   // TODO: Chain the steps in order using .then()
-  // getIngredients()
-  //   .then(...)
-  //   .then(...)
-  //   .then(...)
-  //   .catch(...)
+    getIngredients().then(result => blendSmoothie()).then(result => pourSmoothie()).catch(error);
 }
 
 /* =========================
@@ -82,10 +95,16 @@ async function makeSmoothieAsync() {
   outputDiv.innerHTML = ""; // Clear previous messages
 
   // TODO:
-  // Use try/catch
-  // await getIngredients()
-  // await blendSmoothie()
-  // await pourSmoothie()
-  // Show final success message
-  // Catch and display any errors
+    try {
+        await getIngredients();
+        await blendSmoothie();
+        await pourSmoothie();
+    }
+    catch (e) {
+        console.error(e);
+    }
+ 
 }
+
+//button.addEventListener("click", makeSmoothieWithPromises);
+button.addEventListener("click", makeSmoothieAsync);
